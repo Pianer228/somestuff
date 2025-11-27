@@ -29,6 +29,27 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
     body { background: #121212; color: white; overflow-x: hidden; }
 
+.game-title-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+  color: white;
+  padding: 15px 10px 10px;
+  font-size: 14px;
+  text-align: center;
+  opacity: 0; /* Скрыто по умолчанию */
+  transition: opacity 0.3s ease;
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  pointer-events: none; /* Чтобы клик проходил сквозь текст */
+}
+
+.game:hover .game-title-overlay {
+  opacity: 1;
+}
+
     #loading-screen {
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
@@ -561,7 +582,16 @@ function renderGames(list) {
     div.className = "game";
     div.style.backgroundImage = `url('${game.image}')`;
     div.onclick = () => openGame(game);
+
+    // --- НОВОЕ: Добавляем название ---
+    const titleDiv = document.createElement("div");
+    titleDiv.className = "game-title-overlay";
+    titleDiv.innerText = game.name;
+    div.appendChild(titleDiv);
+    // --------------------------------
+
     const favBtn = document.createElement("button");
+    // ... остальной ваш код кнопки избранного ...
     favBtn.className = "favorite-btn";
     favBtn.innerHTML = "★";
     if (favorites.some(f => f.name === game.name)) {
