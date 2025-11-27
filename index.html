@@ -321,11 +321,22 @@
 </header>
 
 <div class="section-label">Featured:</div>
-<div class="featured-container" id="featuredContainer">
-  <div class="featured-overlay">
-    <div class="featured-title" id="featuredTitle"></div>
-    <button class="featured-button" onclick="openGame(featuredGame)">Play</button>
+<div class="featured-wrapper">
+  
+  <div class="featured-card" id="featCard1" onclick="openGame(featuredGame1)">
+    <div class="featured-overlay">
+      <div class="featured-title" id="featTitle1"></div>
+      <button class="featured-button">Play</button>
+    </div>
   </div>
+
+  <div class="featured-card" id="featCard2" onclick="openGame(featuredGame2)">
+    <div class="featured-overlay">
+      <div class="featured-title" id="featTitle2"></div>
+      <button class="featured-button">Play</button>
+    </div>
+  </div>
+
 </div>
 
 <div class="section-label">All Games:</div>
@@ -575,8 +586,33 @@ const games = [
 { name: "Fireboy and Watergirl 1: Forest Temple", image: "Images/FireBoyWaterGirl1.jpg", path: "FBWG1" }
 ];
 
-const featuredGame = games[0];
+// --- Настройка Featured игр ---
 
+// 1. Первая игра (берем первую из вашего списка, Poxel.IO)
+const featuredGame1 = games[0]; 
+
+// 2. Вторая игра (Veck) - создаем объект вручную
+const featuredGame2 = { 
+    name: "Veck", 
+    // Вам нужно найти картинку для Veck и вставить ссылку ниже
+    image: "https://i.postimg.cc/RFdCsSP5/background-og.webp", 
+    link: "https://veck.io/", 
+    openInNewTab: false 
+};
+
+// Функция инициализации Featured секции
+function initFeatured() {
+    // Настраиваем первую карточку
+    document.getElementById("featCard1").style.backgroundImage = `url('${featuredGame1.image}')`;
+    document.getElementById("featTitle1").textContent = featuredGame1.name;
+
+    // Настраиваем вторую карточку
+    document.getElementById("featCard2").style.backgroundImage = `url('${featuredGame2.image}')`;
+    document.getElementById("featTitle2").textContent = featuredGame2.name;
+}
+
+// Вызываем настройку
+initFeatured();
 const gamesContainer = document.getElementById("gamesContainer");
 const searchInput = document.getElementById("search");
 const gameView = document.getElementById("game-view");
