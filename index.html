@@ -1,382 +1,334 @@
 <!DOCTYPE html>
 <html lang="uk">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Vitya.Game — Ігри Онлайн</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Vitya.Game — Ігри Онлайн</title>
 
-  <meta name="description" content="Vitya.Game — український сайт з безкоштовними браузерними іграми. Грай онлайн у 2D та 3D ігри без завантажень і реклами!">
+  <meta name="description" content="Vitya.Game — український сайт з безкоштовними браузерними іграми. Грай онлайн у 2D та 3D ігри без завантажень і реклами!">
 
-  <meta name="keywords" content="
-    vityagame, vitya game, vitya.game, vitiagame, vitagame,
-    vita geim, vita.game, vita geam, vita gaem,
-    витягейм, віта гейм, віта геім, вітя гейм, вітя геим,
-    ігри онлайн, браузерні ігри, 2D ігри, 3D ігри, грати безкоштовно
-  ">
+  <meta name="keywords" content="
+    vityagame, vitya game, vitya.game, vitiagame, vitagame,
+    vita geim, vita.game, vita geam, vita gaem,
+    витягейм, віта гейм, віта геім, вітя гейм, вітя геим,
+    ігри онлайн, браузерні ігри, 2D ігри, 3D ігри, грати безкоштовно
+  ">
 
-  <!-- OpenGraph -->
-  <meta property="og:title" content="Vitya.Game — український сайт з безкоштовними іграми">
-  <meta property="og:description" content="Грай онлайн у найкращі ігри прямо в браузері без реклами і реєстрації!">
-  <meta property="og:image" content="https://vityagame.ct.ws/Images/AgicLogoNoBg.png">
-  <meta property="og:type" content="website">
+  <!-- OpenGraph -->
+  <meta property="og:title" content="Vitya.Game — український сайт з безкоштовними іграми">
+  <meta property="og:description" content="Грай онлайн у найкращі ігри прямо в браузері без реклами і реєстрації!">
+  <meta property="og:image" content="https://vityagame.ct.ws/Images/AgicLogoNoBg.png">
+  <meta property="og:type" content="website">
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image">
+  <!-- Twitter -->
+  <meta name="twitter:card" content="summary_large_image">
 
-  <!-- Favicon -->
-  <link rel="icon" href="Images/AgicLogoNoBg.png" type="image/png" />
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
-    body { background: #121212; color: white; overflow-x: hidden; }
+  <!-- Favicon -->
+  <link rel="icon" href="Images/AgicLogoNoBg.png" type="image/png" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; }
+    body { background: #121212; color: white; overflow-x: hidden; }
 
-.game-title-overlay {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-  color: white;
-  padding: 15px 10px 10px;
-  font-size: 14px;
-  text-align: center;
-  opacity: 0; /* Скрыто по умолчанию */
-  transition: opacity 0.3s ease;
-  border-bottom-left-radius: 15px;
-  border-bottom-right-radius: 15px;
-  pointer-events: none; /* Чтобы клик проходил сквозь текст */
-}
+    #loading-screen {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: black;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
 
-.game:hover .game-title-overlay {
-  opacity: 1;
-}
+    .loading-logo {
+      width: 100px;
+      margin-bottom: 30px;
+    }
 
-    #loading-screen {
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: black;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
+    .loading-bar {
+      width: 300px;
+      height: 20px;
+      background: #333;
+      border-radius: 10px;
+      overflow: hidden;
+    }
 
-    .loading-logo {
-      width: 100px;
-      margin-bottom: 30px;
-    }
+    .loading-progress {
+      height: 100%;
+      background: purple;
+      width: 0%;
+      animation: loadAnim 2s linear forwards;
+    }
 
-    .loading-bar {
-      width: 300px;
-      height: 20px;
-      background: #333;
-      border-radius: 10px;
-      overflow: hidden;
-    }
+    @keyframes loadAnim {
+      to { width: 100%; }
+    }
 
-    .loading-progress {
-      height: 100%;
-      background: purple;
-      width: 0%;
-      animation: loadAnim 2s linear forwards;
-    }
+    #main-content {
+      display: none;
+    }
 
-    @keyframes loadAnim {
-      to { width: 100%; }
-    }
+    header {
+      background: #000;
+      padding: 10px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header img.logo {
+      height: 40px;
+    }
+    .search-container {
+      flex: 1;
+      margin: 0 20px;
+      position: relative;
+    }
+    .search-container input {
+      width: 100%;
+      padding: 10px 15px;
+      border-radius: 20px;
+      border: none;
+      outline: none;
+      background: #222;
+      color: white;
+    }
+    .search-container input::placeholder {
+      color: #888;
+    }
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+    }
+    .nav-buttons button {
+      background: #333;
+      color: white;
+      border: none;
+      padding: 10px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
 
-    #main-content {
-      display: none;
-    }
+    .section-label {
+      font-weight: bold;
+      font-size: 24px;
+      padding: 20px 20px 10px;
+    }
 
-    header {
-      background: #000;
-      padding: 10px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-    }
-    header img.logo {
-      height: 40px;
-    }
-    .search-container {
-      flex: 1;
-      margin: 0 20px;
-      position: relative;
-    }
-    .search-container input {
-      width: 100%;
-      padding: 10px 15px;
-      border-radius: 20px;
-      border: none;
-      outline: none;
-      background: #222;
-      color: white;
-    }
-    .search-container input::placeholder {
-      color: #888;
-    }
-    .nav-buttons {
-      display: flex;
-      gap: 10px;
-    }
-    .nav-buttons button {
-      background: #333;
-      color: white;
-      border: none;
-      padding: 10px;
-      border-radius: 10px;
-      cursor: pointer;
-    }
+    .featured-container {
+      width: calc(100% - 40px);
+      max-width: 960px;
+      margin: 0 auto;
+      margin-bottom: 20px;
+      height: 200px;
+      border-radius: 20px;
+      overflow: hidden;
+      position: relative;
+      background-size: cover;
+      background-position: center;
+      filter: blur(2px);
+      transition: filter 0.5s ease;
+    }
 
-    .section-label {
-      font-weight: bold;
-      font-size: 24px;
-      padding: 20px 20px 10px;
-    }
+    .featured-container:hover {
+      filter: blur(0);
+    }
 
-/* --- Новые стили для Featured секции --- */
-    .featured-wrapper {
-      display: flex;
-      gap: 20px;
-      width: calc(100% - 40px);
-      max-width: 960px;
-      margin: 0 auto 20px;
-    }
+    .featured-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0,0,0,0.4);
+    }
 
-    .featured-card {
-      flex: 1; /* Каждая игра занимает 50% ширины */
-      height: 200px;
-      border-radius: 20px;
-      overflow: hidden;
-      position: relative;
-      background-size: cover;
-      background-position: center;
-      filter: blur(0px); /* Убрал блюр по умолчанию, так красивее */
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      cursor: pointer;
-      border: 2px solid #333;
-    }
+    .featured-title {
+      font-weight: bold;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
 
-    .featured-card:hover {
-      transform: scale(1.02);
-      box-shadow: 0 0 15px rgba(128, 0, 128, 0.5);
-      border-color: rgba(128, 0, 128, 0.8);
-    }
+    .featured-button {
+      background: rgba(255,255,255,0.1);
+      color: white;
+      border: 2px solid white;
+      padding: 10px 20px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
 
-    .featured-overlay {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      background: rgba(0,0,0,0.3); /* Немного темнее фон */
-      opacity: 0; /* Скрываем текст и кнопку */
-      transition: opacity 0.3s ease;
-    }
-
-    .featured-card:hover .featured-overlay {
-      opacity: 1; /* Показываем при наведении */
-    }
-
-    /* Адаптивность для телефонов: ставим игры друг под друга */
-    @media (max-width: 600px) {
-      .featured-wrapper {
-        flex-direction: column;
-        height: auto;
-      }
-      .featured-card {
-        width: 100%;
-        height: 180px;
-      }
-      /* На телефонах всегда показываем название, так как нет мышки для наведения */
-      .featured-overlay {
-        opacity: 1;
-      }
-    }
-
-    .games-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      padding: 20px;
-      justify-content: center;
-    }
-    .game {
-      position: relative;
-      width: 300px;
-      height: 180px;
-      border-radius: 15px;
-      background-size: cover;
-      background-position: center;
-      cursor: pointer;
-      border: 5px solid transparent;
-      box-shadow: 0 0 0px transparent;
-      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
-    }
-    .game:hover {
-      transform: scale(1.10);
-      box-shadow: 0 0 15px rgba(128, 0, 128, 0.7);
-      border-color: rgba(128, 0, 128, 0.8);
-    }
-    .favorite-btn {
-      position: absolute;
-      top: 8px;
-      right: 10px;
-      background: rgba(0,0,0,0.6);
-      color: white;
-      border: 2.0px solid white;
-      border-radius: 10px;
-      padding: 8px;
-      display: none;
-      cursor: pointer;
-      z-index: 5;
-      width: 28px;
-      height: 28px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      user-select: none;
-      transition: color 0.3s ease, border-color 0.3s ease;
-    }
-    .game:hover .favorite-btn {
-      display: flex;
-    }
-    .favorite-btn.favorited {
-      color: yellow;
-      border-color: yellow;
-    }
-    @keyframes pop {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.2); }
-      100% { transform: scale(1); }
-    }
-    #game-view {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: #000;
-      z-index: 1000;
-      flex-direction: column;
-    }
-    #game-frame {
-      flex: 1;
-      border: none;
-      width: 100%;
-    }
-    .top-bar {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 4px 10px;
-      background: black;
-      color: white;
-      height: 40px;
-    }
-    .top-bar img {
-      height: 30px;
-    }
-    .top-bar h2 {
-      flex: 1;
-      text-align: center;
-      font-size: 14px;
-    }
-    .top-bar button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-      width: 32px;
-      height: 32px;
-    }
-    .top-bar .fullscreen-btn {
-      margin-right: 5px;
-    }
-  </style>
+    .games-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+      justify-content: center;
+    }
+    .game {
+      position: relative;
+      width: 300px;
+      height: 180px;
+      border-radius: 15px;
+      background-size: cover;
+      background-position: center;
+      cursor: pointer;
+      border: 5px solid transparent;
+      box-shadow: 0 0 0px transparent;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .game:hover {
+      transform: scale(1.10);
+      box-shadow: 0 0 15px rgba(128, 0, 128, 0.7);
+      border-color: rgba(128, 0, 128, 0.8);
+    }
+    .favorite-btn {
+      position: absolute;
+      top: 8px;
+      right: 10px;
+      background: rgba(0,0,0,0.6);
+      color: white;
+      border: 2.0px solid white;
+      border-radius: 10px;
+      padding: 8px;
+      display: none;
+      cursor: pointer;
+      z-index: 5;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      user-select: none;
+      transition: color 0.3s ease, border-color 0.3s ease;
+    }
+    .game:hover .favorite-btn {
+      display: flex;
+    }
+    .favorite-btn.favorited {
+      color: yellow;
+      border-color: yellow;
+    }
+    @keyframes pop {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+      100% { transform: scale(1); }
+    }
+    #game-view {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #000;
+      z-index: 1000;
+      flex-direction: column;
+    }
+    #game-frame {
+      flex: 1;
+      border: none;
+      width: 100%;
+    }
+    .top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 10px;
+      background: black;
+      color: white;
+      height: 40px;
+    }
+    .top-bar img {
+      height: 30px;
+    }
+    .top-bar h2 {
+      flex: 1;
+      text-align: center;
+      font-size: 14px;
+    }
+    .top-bar button {
+      background: none;
+      border: none;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+    }
+    .top-bar .fullscreen-btn {
+      margin-right: 5px;
+    }
+  </style>
 </head>
 <body onload="initPage()">
 <div id="loading-screen">
-  <img src="Images/AgicLogoNoBg.png" class="loading-logo" />
-  <div class="loading-bar">
-    <div class="loading-progress"></div>
-  </div>
+  <img src="Images/AgicLogoNoBg.png" class="loading-logo" />
+  <div class="loading-bar">
+    <div class="loading-progress"></div>
+  </div>
 </div>
 
 <div id="main-content">
 <header>
-  <img src="Images/AgicLogoNoBg.png" class="logo" alt="Vitya.Game Logo" />
-  <div class="search-container">
-    <input type="text" id="search" placeholder="Search games..." />
-  </div>
-  <div class="nav-buttons">
-    <button onclick="showAllGames()">All Games</button>
-    <button onclick="showFavorites()">★ Favorites</button>
-  </div>
+  <img src="Images/AgicLogoNoBg.png" class="logo" alt="Vitya.Game Logo" />
+  <div class="search-container">
+    <input type="text" id="search" placeholder="Search games..." />
+  </div>
+  <div class="nav-buttons">
+    <button onclick="showAllGames()">All Games</button>
+    <button onclick="showFavorites()">★ Favorites</button>
+  </div>
 </header>
 
 <div class="section-label">Featured:</div>
-<div class="featured-wrapper">
-  
-  <div class="featured-card" id="featCard1" onclick="openGame(featuredGame1)">
-    <div class="featured-overlay">
-      <div class="featured-title" id="featTitle1"></div>
-      <button class="featured-button">Play</button>
-    </div>
-  </div>
-
-  <div class="featured-card" id="featCard2" onclick="openGame(featuredGame2)">
-    <div class="featured-overlay">
-      <div class="featured-title" id="featTitle2"></div>
-      <button class="featured-button">Play</button>
-    </div>
-  </div>
-
+<div class="featured-container" id="featuredContainer">
+  <div class="featured-overlay">
+    <div class="featured-title" id="featuredTitle"></div>
+    <button class="featured-button" onclick="openGame(featuredGame)">Play</button>
+  </div>
 </div>
 
 <div class="section-label">All Games:</div>
 <div class="games-container" id="gamesContainer"></div>
 
 <div id="game-view">
-  <div class="top-bar">
-    <div style="display: flex; align-items: center;">
-      <img src="Images/AgicLogoNoBg.png" />
-    </div>
-    <h2 id="gameTitle"></h2>
-    <div>
-      <button class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()">⛶</button>
-      <button onclick="closeGame()">✕</button>
-    </div>
-  </div>
-  <iframe id="game-frame"></iframe>
+  <div class="top-bar">
+    <div style="display: flex; align-items: center;">
+      <img src="Images/AgicLogoNoBg.png" />
+    </div>
+    <h2 id="gameTitle"></h2>
+    <div>
+      <button class="fullscreen-btn" id="fullscreenBtn" onclick="toggleFullscreen()">⛶</button>
+      <button onclick="closeGame()">✕</button>
+    </div>
+  </div>
+  <iframe id="game-frame"></iframe>
 </div>
 </div>
 
 <script>
-  const BASE_URLS = {
-    base1: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles384207-1/", active: true },
-    base2: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles527194-2/other/", active: true },
-    base3: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/", active: true },
-    base4: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles527194-2/other1/", active: true },
-    base5: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles527194-2/other2/", active: true },
-    base6: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles527194-2/other4/", active: true },
-    base7: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles527194-2/other3/", active: true },
-    base8: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles183294-4/", active: true },
-    base9: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles48018-3/", active: true },
-    base10: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles91738-5/", active: true },
-    base11: { url: "https://a7k9-Lq2d-V8r1-zX0c-Mb6p-Tn4g-Wy3e-Ju5h.github.io/AgicFiles018374-6/", active: true },
-    base12: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/fnf/", active: true },
-    base13: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/MassiveStorage/", active: true },
-    base14: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/minecraft/", active: true }
-  };
+  const BASE_URLS = {
+    base1: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles384207-1/", active: true },
+    base2: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles527194-2/other/", active: true },
+    base3: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/", active: true },
+    base4: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles527194-2/other1/", active: true },
+    base5: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles527194-2/other2/", active: true },
+    base6: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles527194-2/other4/", active: true },
+    base7: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles527194-2/other3/", active: true },
+    base8: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles183294-4/", active: true },
+    base9: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles48018-3/", active: true },
+    base10: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/AgicFiles91738-5/", active: true },
+    base11: { url: "https://a7k9-Lq2d-V8r1-zX0c-Mb6p-Tn4g-Wy3e-Ju5h.github.io/AgicFiles018374-6/", active: true },
+    base12: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/fnf/", active: true },
+    base13: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/MassiveStorage/", active: true },
+    base14: { url: "https://a7k9-lq2d-v8r1-zx0c-mb6p-tn4g-wy3e-ju5h.github.io/minecraft/", active: true }
+  };
 
 const games = [
-  { name: "Poxel.IO", image: "https://i.postimg.cc/cC4WHQvs/poxel-io-16x9-cover.jpg", link: "https://poxel.io/", openInNewTab: false },
+{ name: "! veck.io", image: "https://i.postimg.cc/RFdCsSP5/background-og.webp", link: "https://veck.io/", openInNewTab: false },
+{ name: "! Poxel.IO", image: "https://i.postimg.cc/cC4WHQvs/poxel-io-16x9-cover.jpg", link: "https://poxel.io/", openInNewTab: false },
 { name: " ! Hamster Combat", image: "https://i.postimg.cc/MTBM5J5H/OIP.webp", link: "https://allahsolutions.github.io/hamsterclicker/", openInNewTab: false },
 { name: " ! Skibidi Toilet Tower Defense", image: "https://i.postimg.cc/rm2F80G9/pjpg350x209.webp", link: "https://allahsolutions.github.io/skibiditowerdef/", openInNewTab: false },
 { name: "Cookie Clicker", image: "Images/cookieclicker.jpeg", path: "cookieclicker/" },
@@ -586,33 +538,8 @@ const games = [
 { name: "Fireboy and Watergirl 1: Forest Temple", image: "Images/FireBoyWaterGirl1.jpg", path: "FBWG1" }
 ];
 
-// --- Настройка Featured игр ---
+const featuredGame = games[0];
 
-// 1. Первая игра (берем первую из вашего списка, Poxel.IO)
-const featuredGame1 = games[0]; 
-
-// 2. Вторая игра (Veck) - создаем объект вручную
-const featuredGame2 = { 
-    name: "Veck", 
-    // Вам нужно найти картинку для Veck и вставить ссылку ниже
-    image: "https://i.postimg.cc/RFdCsSP5/background-og.webp", 
-    link: "https://veck.io/", 
-    openInNewTab: false 
-};
-
-// Функция инициализации Featured секции
-function initFeatured() {
-    // Настраиваем первую карточку
-    document.getElementById("featCard1").style.backgroundImage = `url('${featuredGame1.image}')`;
-    document.getElementById("featTitle1").textContent = featuredGame1.name;
-
-    // Настраиваем вторую карточку
-    document.getElementById("featCard2").style.backgroundImage = `url('${featuredGame2.image}')`;
-    document.getElementById("featTitle2").textContent = featuredGame2.name;
-}
-
-// Вызываем настройку
-initFeatured();
 const gamesContainer = document.getElementById("gamesContainer");
 const searchInput = document.getElementById("search");
 const gameView = document.getElementById("game-view");
@@ -628,142 +555,134 @@ let favorites = JSON.parse(localStorage.getItem("vityaGameFavorites")) || [];
 let currentView = "all";
 
 function renderGames(list) {
-  list.sort((a, b) => a.name.localeCompare(b.name));
-  gamesContainer.innerHTML = "";
-  list.forEach(game => {
-    const div = document.createElement("div");
-    div.className = "game";
-    div.style.backgroundImage = `url('${game.image}')`;
-    div.onclick = () => openGame(game);
-
-    // --- НОВОЕ: Добавляем название ---
-    const titleDiv = document.createElement("div");
-    titleDiv.className = "game-title-overlay";
-    titleDiv.innerText = game.name;
-    div.appendChild(titleDiv);
-    // --------------------------------
-
-    const favBtn = document.createElement("button");
-    // ... остальной ваш код кнопки избранного ...
-    favBtn.className = "favorite-btn";
-    favBtn.innerHTML = "★";
-    if (favorites.some(f => f.name === game.name)) {
-      favBtn.classList.add("favorited");
-    }
-    favBtn.onclick = e => {
-      e.stopPropagation();
-      toggleFavorite(game, favBtn);
-    };
-    div.appendChild(favBtn);
-    gamesContainer.appendChild(div);
-  });
+  list.sort((a, b) => a.name.localeCompare(b.name));
+  gamesContainer.innerHTML = "";
+  list.forEach(game => {
+    const div = document.createElement("div");
+    div.className = "game";
+    div.style.backgroundImage = `url('${game.image}')`;
+    div.onclick = () => openGame(game);
+    const favBtn = document.createElement("button");
+    favBtn.className = "favorite-btn";
+    favBtn.innerHTML = "★";
+    if (favorites.some(f => f.name === game.name)) {
+      favBtn.classList.add("favorited");
+    }
+    favBtn.onclick = e => {
+      e.stopPropagation();
+      toggleFavorite(game, favBtn);
+    };
+    div.appendChild(favBtn);
+    gamesContainer.appendChild(div);
+  });
 }
 
 function toggleFavorite(game, btn) {
-  const index = favorites.findIndex(f => f.name === game.name);
-  const isFavoriting = index === -1;
-  if (isFavoriting) {
-    favorites.push(game);
-  } else {
-    favorites.splice(index, 1);
-  }
-  localStorage.setItem("vityaGameFavorites", JSON.stringify(favorites));
-  if (isFavoriting) {
-    btn.classList.add("favorited");
-    btn.style.animation = "pop 0.3s ease forwards";
-    btn.addEventListener("animationend", () => {
-      btn.style.animation = "";
-    }, { once: true });
-  } else {
-    btn.classList.remove("favorited");
-  }
-  if (currentView === "favorites") {
-    showFavorites();
-  }
+  const index = favorites.findIndex(f => f.name === game.name);
+  const isFavoriting = index === -1;
+  if (isFavoriting) {
+    favorites.push(game);
+  } else {
+    favorites.splice(index, 1);
+  }
+  localStorage.setItem("vityaGameFavorites", JSON.stringify(favorites));
+  if (isFavoriting) {
+    btn.classList.add("favorited");
+    btn.style.animation = "pop 0.3s ease forwards";
+    btn.addEventListener("animationend", () => {
+      btn.style.animation = "";
+    }, { once: true });
+  } else {
+    btn.classList.remove("favorited");
+  }
+  if (currentView === "favorites") {
+    showFavorites();
+  }
 }
 
 function showAllGames() {
-  currentView = "all";
-  renderGames(games);
+  currentView = "all";
+  renderGames(games);
 }
 
 function showFavorites() {
-  currentView = "favorites";
-  renderGames(favorites);
+  currentView = "favorites";
+  renderGames(favorites);
 }
 
 async function openGame(game) {
-  if (game.link) {
-    if (game.openInNewTab) {
-      window.open(game.link, '_blank');
-      return;
-    }
-    launchGame(game.link, game.name);
-    return;
-  }
-  const activeBases = Object.values(BASE_URLS).filter(base => base.active).map(base => base.url);
-  for (const base of activeBases) {
-    const fullUrl = base + game.path;
-    try {
-      const response = await fetch(fullUrl, { method: 'HEAD' });
-      if (response.ok) {
-        launchGame(fullUrl, game.name);
-        return;
-      }
-    } catch (e) {}
-  }
-  alert(`Could not load "${game.name}"`);
+  if (game.link) {
+    if (game.openInNewTab) {
+      window.open(game.link, '_blank');
+      return;
+    }
+    launchGame(game.link, game.name);
+    return;
+  }
+  const activeBases = Object.values(BASE_URLS).filter(base => base.active).map(base => base.url);
+  for (const base of activeBases) {
+    const fullUrl = base + game.path;
+    try {
+      const response = await fetch(fullUrl, { method: 'HEAD' });
+      if (response.ok) {
+        launchGame(fullUrl, game.name);
+        return;
+      }
+    } catch (e) {}
+  }
+  alert(`Could not load "${game.name}"`);
 }
 
 function launchGame(url, title) {
-  gameFrame.src = url;
-  gameTitle.textContent = title;
-  gameView.style.display = "flex";
+  gameFrame.src = url;
+  gameTitle.textContent = title;
+  gameView.style.display = "flex";
 }
 
 function closeGame() {
-  gameView.style.display = "none";
-  gameFrame.src = "";
-  if (document.fullscreenElement) {
-    document.exitFullscreen();
-  }
-  fullscreenBtn.innerText = "⛶";
-  topBar.style.visibility = "visible";
+  gameView.style.display = "none";
+  gameFrame.src = "";
+  if (document.fullscreenElement) {
+    document.exitFullscreen();
+  }
+  fullscreenBtn.innerText = "⛶";
+  topBar.style.visibility = "visible";
 }
 
 function toggleFullscreen() {
-  if (!document.fullscreenElement) {
-    gameFrame.requestFullscreen();
-  } else {
-    document.exitFullscreen();
-  }
+  if (!document.fullscreenElement) {
+    gameFrame.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
 }
 
 document.addEventListener("fullscreenchange", () => {
-  const isFullscreen = document.fullscreenElement === gameFrame;
-  fullscreenBtn.innerText = isFullscreen ? "🡽" : "⛶";
-  topBar.style.visibility = isFullscreen ? "hidden" : "visible";
-  fullscreenBtn.style.visibility = "visible";
-  fullscreenBtn.style.position = isFullscreen ? "fixed" : "initial";
-  fullscreenBtn.nextElementSibling.style.visibility = "visible";
+  const isFullscreen = document.fullscreenElement === gameFrame;
+  fullscreenBtn.innerText = isFullscreen ? "🡽" : "⛶";
+  topBar.style.visibility = isFullscreen ? "hidden" : "visible";
+  fullscreenBtn.style.visibility = "visible";
+  fullscreenBtn.style.position = isFullscreen ? "fixed" : "initial";
+  fullscreenBtn.nextElementSibling.style.visibility = "visible";
 });
 
 searchInput.addEventListener("input", () => {
-  const term = searchInput.value.toLowerCase();
-  if (currentView === "favorites") {
-    renderGames(favorites.filter(g => g.name.toLowerCase().includes(term)));
-  } else {
-    renderGames(games.filter(g => g.name.toLowerCase().includes(term)));
-  }
+  const term = searchInput.value.toLowerCase();
+  if (currentView === "favorites") {
+    renderGames(favorites.filter(g => g.name.toLowerCase().includes(term)));
+  } else {
+    renderGames(games.filter(g => g.name.toLowerCase().includes(term)));
+  }
 });
 
 function initPage() {
-  showAllGames();
-  setTimeout(() => {
-    document.getElementById("loading-screen").style.display = "none";
-    document.getElementById("main-content").style.display = "block";
-  }, 2200);
+  showAllGames();
+  setTimeout(() => {
+    document.getElementById("loading-screen").style.display = "none";
+    document.getElementById("main-content").style.display = "block";
+  }, 2200);
 }
 </script>
 </body>
 </html>
+Что добавить на мой сайт?
